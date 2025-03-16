@@ -1,4 +1,4 @@
-# PMSSS Scholarship Management System
+# Scholarship Management System
 
 A comprehensive web-based platform for managing scholarship applications, document verification, and administrative tasks.
 
@@ -64,7 +64,7 @@ A comprehensive web-based platform for managing scholarship applications, docume
 
 1. Clone the repository:
    \`\`\`bash
-   git clone https://github.com/yourusername/pmsss-scholarship-system.git
+   git clone https://github.com/Gopi-techy/scholarship-management-system.git
    cd pmsss-scholarship-system
    \`\`\`
 
