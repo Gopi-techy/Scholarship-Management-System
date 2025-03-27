@@ -1,6 +1,6 @@
 # Scholarship Management System
 
-A comprehensive system for managing scholarship applications, built with React, Node.js, and Firebase.
+A comprehensive system for managing scholarship applications, built with React, Node.js, Azure and Firebase.
 
 ## Project Structure
 
@@ -68,6 +68,7 @@ scholarship-management-system/
 
 - Node.js (v16 or higher)
 - npm or yarn
+- Azure subscription
 - Firebase account
 - Docker (optional)
 
