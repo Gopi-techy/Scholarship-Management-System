@@ -1,6 +1,6 @@
-# PMSSS Scholarship Management System - Frontend
+# Scholarship Management System - Frontend
 
-This is the frontend application for the PMSSS Scholarship Management System, built with React, TypeScript, Material-UI, and Firebase.
+This is the frontend application for the Scholarship Management System, built with React, TypeScript, Material-UI, and Firebase.
 
 ## Prerequisites
 
