@@ -66,7 +66,7 @@ The Scholarship Management System is a production-ready, scalable platform desig
 │  │  └─ Error Handler (Centralized Error Management)             │
 │  └─ Authentication & Authorization                              │
 │     ├─ Firebase Admin SDK (Token Verification)                  │
-│     ├─ JWT Middleware                                            │
+│     ├─ JWT Middleware                                           │
 │     └─ Role-Based Access Control (RBAC)                         │
 └────────────────────┬────────────────────────────────────────────┘
                      │
@@ -78,8 +78,8 @@ The Scholarship Management System is a production-ready, scalable platform desig
 │  ├─ User Service          ├─ Document Service                   │
 │  ├─ Application Service   └─ Notification Service               │
 │  └─ Validation (Joi/Yup Schemas)                                │
-└────────┬────────────────────────────────┬───────────────────┬───┘
-         │                                │                   │
+└────────┬──────────────────────────────┬─────────────────────┬───┘
+         │                              │                     │
 ┌────────▼────────┐  ┌──────────────────▼─────┐  ┌────────────▼──────┐
 │  Data Layer     │  │   Cloud Services       │  │  External APIs    │
 ├─────────────────┤  ├────────────────────────┤  ├───────────────────┤
