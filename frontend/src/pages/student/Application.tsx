@@ -46,13 +46,19 @@ const Application: React.FC = () => {
     const { name, value } = e.target;
     if (name.includes('.')) {
       const [section, field] = name.split('.');
-      setFormData((prev) => ({
-        ...prev,
-        [section]: {
-          ...prev[section as keyof typeof prev],
-          [field]: value,
-        },
-      }));
+      setFormData((prev) => {
+        const sectionData = prev[section as keyof typeof prev];
+        if (typeof sectionData === 'object' && sectionData !== null) {
+          return {
+            ...prev,
+            [section]: {
+              ...sectionData,
+              [field]: value,
+            },
+          };
+        }
+        return prev;
+      });
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -105,15 +111,17 @@ const Application: React.FC = () => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="scholarshipType" className="block text-sm font-medium text-foreground">
                 Scholarship Type
               </label>
               <select
+                id="scholarshipType"
                 name="scholarshipType"
                 value={formData.scholarshipType}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Scholarship Type"
               >
                 <option value="">Select type</option>
                 <option value="merit">Merit-based</option>
@@ -122,28 +130,32 @@ const Application: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="academicYear" className="block text-sm font-medium text-foreground">
                 Academic Year
               </label>
               <input
+                id="academicYear"
                 type="text"
                 name="academicYear"
                 value={formData.academicYear}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Academic Year"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="semester" className="block text-sm font-medium text-foreground">
                 Semester
               </label>
               <select
+                id="semester"
                 name="semester"
                 value={formData.semester}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Semester"
               >
                 <option value="">Select semester</option>
                 <option value="Fall">Fall</option>
@@ -158,28 +170,32 @@ const Application: React.FC = () => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="familyIncome" className="block text-sm font-medium text-foreground">
                 Family Income
               </label>
               <input
+                id="familyIncome"
                 type="number"
                 name="financialInfo.familyIncome"
                 value={formData.financialInfo.familyIncome}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Family Income"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="employmentStatus" className="block text-sm font-medium text-foreground">
                 Employment Status
               </label>
               <select
+                id="employmentStatus"
                 name="financialInfo.employmentStatus"
                 value={formData.financialInfo.employmentStatus}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Employment Status"
               >
                 <option value="unemployed">Unemployed</option>
                 <option value="employed">Employed</option>
@@ -193,10 +209,11 @@ const Application: React.FC = () => {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="currentGPA" className="block text-sm font-medium text-foreground">
                 Current GPA
               </label>
               <input
+                id="currentGPA"
                 type="number"
                 step="0.01"
                 name="academicInfo.currentGPA"
@@ -204,30 +221,35 @@ const Application: React.FC = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Current GPA"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="creditHours" className="block text-sm font-medium text-foreground">
                 Credit Hours
               </label>
               <input
+                id="creditHours"
                 type="number"
                 name="academicInfo.creditHours"
                 value={formData.academicInfo.creditHours}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-input bg-background px-3 py-2"
                 required
+                aria-label="Credit Hours"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground">
+              <label htmlFor="documentUpload" className="block text-sm font-medium text-foreground">
                 Upload Documents
               </label>
               <input
+                id="documentUpload"
                 type="file"
                 onChange={handleFileUpload}
                 className="mt-1 block w-full"
                 accept=".pdf,.doc,.docx"
+                aria-label="Upload Documents"
               />
             </div>
             <div className="mt-2">

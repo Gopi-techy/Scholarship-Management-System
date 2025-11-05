@@ -24,7 +24,6 @@ import {
   DialogContent,
   DialogActions,
   Grid,
-  Divider,
   Container,
   Stack,
   Skeleton,
@@ -40,10 +39,10 @@ import {
   FilterList as FilterIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { documentService } from '../services/api';
+import { documentService } from '../../services';
 import { toast } from 'react-toastify';
 
-interface Document {
+interface StudentDocument {
   _id: string;
   fileName: string;
   fileUrl: string;
@@ -72,7 +71,7 @@ interface Document {
 }
 
 const StudentDocumentUpload: React.FC = () => {
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<StudentDocument[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -83,7 +82,7 @@ const StudentDocumentUpload: React.FC = () => {
   const [filterType, setFilterType] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [previewDialog, setPreviewDialog] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<StudentDocument | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -98,7 +97,7 @@ const StudentDocumentUpload: React.FC = () => {
       if (filterStatus) params.append('status', filterStatus);
       
       const response = await documentService.getDocuments(params.toString());
-      setDocuments(response);
+      setDocuments(response as unknown as StudentDocument[]);
     } catch (error) {
       setError('Failed to fetch documents');
       toast.error('Failed to fetch documents');
@@ -141,7 +140,7 @@ const StudentDocumentUpload: React.FC = () => {
       if (description) formData.append('description', description);
 
       const response = await documentService.uploadDocument(formData);
-      setDocuments((prev) => [response, ...prev]);
+      setDocuments((prev) => [response as unknown as StudentDocument, ...prev]);
       toast.success('Document uploaded successfully');
       
       // Reset form
@@ -175,7 +174,7 @@ const StudentDocumentUpload: React.FC = () => {
     }
   };
 
-  const handlePreview = (document: Document) => {
+  const handlePreview = (document: StudentDocument) => {
     setSelectedDocument(document);
     setPreviewDialog(true);
   };
@@ -219,9 +218,10 @@ const StudentDocumentUpload: React.FC = () => {
               Upload Document
             </Typography>
             <Box sx={{ mt: 2 }}>
-              <input
+              <Box
+                component="input"
                 accept="application/pdf,image/*"
-                style={{ display: 'none' }}
+                sx={{ display: 'none' }}
                 id="document-upload"
                 type="file"
                 onChange={handleFileSelect}
@@ -446,15 +446,17 @@ const StudentDocumentUpload: React.FC = () => {
                 )}
                 <Box sx={{ mt: 2 }}>
                   {selectedDocument.fileType.startsWith('image/') ? (
-                    <img
+                    <Box
+                      component="img"
                       src={selectedDocument.fileUrl}
                       alt={selectedDocument.fileName}
-                      style={{ maxWidth: '100%', maxHeight: '70vh' }}
+                      sx={{ maxWidth: '100%', maxHeight: '70vh' }}
                     />
                   ) : (
-                    <iframe
+                    <Box
+                      component="iframe"
                       src={selectedDocument.fileUrl}
-                      style={{ width: '100%', height: '70vh', border: 'none' }}
+                      sx={{ width: '100%', height: '70vh', border: 'none' }}
                       title={selectedDocument.fileName}
                     />
                   )}

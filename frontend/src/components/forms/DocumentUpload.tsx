@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useAuth } from '../contexts/AuthContext';
-import { useApi, api } from '../hooks/useApi';
+import { useAuth } from '../../contexts/AuthContext';
+import { useApi } from '../../hooks/useApi';
 import { toast } from 'react-toastify';
 
 interface DocumentUploadProps {
@@ -23,7 +23,6 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const uploadDocument = useApi(async (formData: FormData) => {
-    const token = await currentUser?.getIdToken();
     const endpoint = applicationId
       ? `/documents/upload/${applicationId}`
       : '/documents/upload';
@@ -31,7 +30,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
     return fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${currentUser?.uid}`,
       },
       body: formData,
     });
@@ -117,7 +116,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
       {uploadProgress > 0 && uploadProgress < 100 && (
         <div className="mt-4">
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div className="w-full bg-gray-200 rounded-full h-2.5" role="progressbar" aria-label="Upload progress">
             <div
               className="bg-primary h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${uploadProgress}%` }}

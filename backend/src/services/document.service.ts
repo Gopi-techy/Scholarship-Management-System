@@ -23,45 +23,62 @@ interface DocumentMetadata {
 }
 
 export class DocumentService {
+  /**
+   * Upload document to Azure Blob Storage and create metadata in Firestore
+   */
   static async uploadDocument(
-    file: Express.Multer.File,
+    fileBuffer: Buffer,
+    fileName: string,
+    mimeType: string,
     userId: string,
     documentType: string,
-    applicationId?: string
-  ) {
+    description: string
+  ): Promise<DocumentMetadata> {
     try {
-      const blobName = `${userId}/${documentType}/${uuidv4()}-${file.originalname}`;
+      const timestamp = Date.now();
+      const blobName = `${userId}/${documentType}/${timestamp}-${fileName}`;
       const blockBlobClient = documentsContainer.getBlockBlobClient(blobName);
 
-      await blockBlobClient.uploadData(file.buffer, {
+      await blockBlobClient.upload(fileBuffer, fileBuffer.length, {
         blobHTTPHeaders: {
-          blobContentType: file.mimetype
+          blobContentType: mimeType
         }
       });
 
-      const document = {
+      // Create document metadata in Firestore
+      const docRef = await db.collection('documents').add({
+        userId,
         type: documentType,
+        description,
         blobUrl: blobName,
-        uploadDate: new Date(),
-        verificationStatus: 'pending'
+        fileName,
+        mimeType,
+        fileSize: fileBuffer.length,
+        status: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+
+      // Update user's documents array
+      await db.collection('users').doc(userId).update({
+        documents: FieldValue.arrayUnion(docRef.id)
+      });
+
+      logger.info(`Document uploaded for user ${userId}: ${fileName}`);
+
+      return {
+        id: docRef.id,
+        userId,
+        type: documentType,
+        description,
+        blobUrl: blobName,
+        status: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
-
-      // Update user or application document list
-      if (applicationId) {
-        await Application.findByIdAndUpdate(applicationId, {
-          $push: { documents: document }
-        });
-      } else {
-        await User.findOneAndUpdate(
-          { firebaseUid: userId },
-          { $push: { documents: document } }
-        );
-      }
-
-      return document;
     } catch (error) {
-      console.error('Error uploading document:', error);
-      throw new Error('Failed to upload document');
+      logger.error('Error uploading document:', error);
+      throw new AppError('Failed to upload document', 500);
     }
   }
 

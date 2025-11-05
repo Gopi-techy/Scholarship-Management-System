@@ -20,8 +20,7 @@ import {
   Warning as WarningIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
-import { scholarshipService } from '../../services/scholarshipService';
-import { applicationService } from '../../services/applicationService';
+import { scholarshipService, applicationService } from '../../services';
 
 interface DashboardStats {
   totalScholarships: number;
@@ -53,15 +52,15 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch scholarships
-        const scholarships = await scholarshipService.getScholarships();
+        const scholarships = await scholarshipService.getAllScholarships();
         
         // Fetch applications
         const applications = await applicationService.getApplications();
         
         // Calculate stats
-        const activeApplications = applications.filter(app => app.status === 'active').length;
-        const approvedApplications = applications.filter(app => app.status === 'approved').length;
-        const pendingApplications = applications.filter(app => app.status === 'pending').length;
+        const activeApplications = applications.filter((app: any) => app.status === 'pending').length;
+        const approvedApplications = applications.filter((app: any) => app.status === 'approved').length;
+        const pendingApplications = applications.filter((app: any) => app.status === 'pending').length;
 
         setStats({
           totalScholarships: scholarships.length,
@@ -71,12 +70,12 @@ const Dashboard = () => {
         });
 
         // Get recent activity
-        const activity = applications.map(app => ({
+        const activity = applications.map((app: any) => ({
           id: app.id,
           type: 'application' as const,
-          title: app.scholarshipName,
+          title: `Application for ${app.scholarshipId}`,
           status: app.status as 'approved' | 'pending' | 'rejected',
-          date: new Date(app.createdAt).toLocaleDateString(),
+          date: new Date(app.submittedAt).toLocaleDateString(),
         }));
 
         setRecentActivity(activity.slice(0, 5)); // Show only 5 most recent activities
@@ -114,7 +113,7 @@ const Dashboard = () => {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Welcome, {currentUser?.displayName || 'Student'}
+        Welcome, {currentUser?.email || 'Student'}
       </Typography>
       
       <Grid container spacing={3}>

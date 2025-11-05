@@ -1,8 +1,43 @@
-# Scholarship Management System
+# 🎓 Scholarship Management System
 
-A comprehensive system for managing scholarship applications, built with React, Node.js, Azure and Firebase.
+A comprehensive, enterprise-grade system for managing scholarship applications, built with modern technologies including React, Node.js, TypeScript, Firebase, Azure, and MongoDB.
 
-## Project Structure
+<div align="center">
+  <img src="https://i.imgur.com/your-image-id.png" alt="Scholarship Management System Preview" width="800"/>
+</div>
+
+## ✨ Features
+
+### For Students
+- 🔐 **Secure Authentication** - Firebase Authentication with role-based access control
+- 📝 **Application Management** - Submit and track scholarship applications
+- 📄 **Document Upload** - Upload and manage required documents (transcripts, essays, recommendations)
+- 🔍 **Scholarship Discovery** - Search and browse available scholarships with advanced filters
+- 📊 **Application Status Tracking** - Real-time updates on application status
+- 👤 **Profile Management** - Manage personal information and contact details
+- 🔔 **Notifications** - Receive updates about application status changes
+
+### For Administrators
+- 📋 **Application Review** - Review and manage all scholarship applications
+- ✅ **Document Verification** - Verify and validate student documents
+- 🎯 **Scholarship Management** - Create, edit, and manage scholarship programs
+- 👥 **User Management** - Manage student and admin accounts
+- 📊 **Dashboard & Analytics** - View statistics and insights
+- 💬 **Review Notes** - Add notes and comments to applications
+- 🔄 **Status Management** - Approve or reject applications with detailed feedback
+
+### Technical Features
+- 🔒 **Enterprise Security** - Helmet.js, CORS, rate limiting, input validation
+- 🚀 **High Performance** - Optimized with compression and caching
+- 📱 **Responsive Design** - Mobile-first Material-UI interface
+- ☁️ **Cloud Infrastructure** - Firebase, Azure, MongoDB Atlas
+- 🐳 **Docker Support** - Fully containerized with Docker Compose
+- 📝 **TypeScript** - Full type safety across the stack
+- 🧪 **Testing Ready** - Jest and testing infrastructure included
+- 📊 **Logging & Monitoring** - Winston logger with structured logging
+- 🔄 **CI/CD Ready** - GitHub Actions workflow included
+
+## 🏗️ Project Structure
 
 ```
 scholarship-management-system/

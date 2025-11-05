@@ -1,4 +1,4 @@
-import api from './api';
+import api from '../utils/api';
 
 export interface Document {
   id: string;
@@ -12,11 +12,7 @@ export interface Document {
 
 const documentService = {
   // Upload a document
-  uploadDocument: async (file: File, type: string): Promise<Document> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', type);
-
+  uploadDocument: async (formData: FormData): Promise<Document> => {
     const response = await api.post<Document>('/documents/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -27,7 +23,13 @@ const documentService = {
 
   // Get user's documents
   getUserDocuments: async (): Promise<Document[]> => {
-    const response = await api.get<Document[]>('/documents/user');
+    const response = await api.get<Document[]>('/documents');
+    return response.data;
+  },
+
+  // Get documents with query params
+  getDocuments: async (query?: string): Promise<Document[]> => {
+    const response = await api.get<Document[]>(`/documents${query ? `?${query}` : ''}`);
     return response.data;
   },
 
@@ -54,6 +56,25 @@ const documentService = {
   // Get document by ID
   getDocument: async (id: string): Promise<Document> => {
     const response = await api.get<Document>(`/documents/${id}`);
+    return response.data;
+  },
+
+  // Analyze document (for Azure AI)
+  analyzeDocument: async (file: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await api.post('/documents/analyze', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  // Analyze document from URL
+  analyzeDocumentUrl: async (url: string): Promise<any> => {
+    const response = await api.post('/documents/analyze-url', { url });
     return response.data;
   },
 };

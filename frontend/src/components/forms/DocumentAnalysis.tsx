@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { documentService } from '../services/api';
+import { documentService } from '../../services';
 import { Box, Button, TextField, Typography, Paper, CircularProgress, Alert } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 

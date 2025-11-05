@@ -21,9 +21,7 @@ import {
   Warning as WarningIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
-import { scholarshipService } from '../../services/scholarshipService';
-import { applicationService } from '../../services/applicationService';
-import { userService } from '../../services/userService';
+import { scholarshipService, applicationService, userService } from '../../services';
 
 interface DashboardStats {
   totalStudents: number;
@@ -60,15 +58,15 @@ const Dashboard = () => {
       try {
         // Fetch all required data
         const [students, scholarships, applications] = await Promise.all([
-          userService.getUsers(),
-          scholarshipService.getScholarships(),
+          userService.getAllUsers(),
+          scholarshipService.getAllScholarships(),
           applicationService.getApplications(),
         ]);
 
         // Calculate stats
-        const pendingApplications = applications.filter(app => app.status === 'pending').length;
-        const approvedApplications = applications.filter(app => app.status === 'approved').length;
-        const rejectedApplications = applications.filter(app => app.status === 'rejected').length;
+        const pendingApplications = applications.filter((app: any) => app.status === 'pending').length;
+        const approvedApplications = applications.filter((app: any) => app.status === 'approved').length;
+        const rejectedApplications = applications.filter((app: any) => app.status === 'rejected').length;
 
         setStats({
           totalStudents: students.length,
@@ -81,14 +79,14 @@ const Dashboard = () => {
 
         // Get recent activity
         const activity = [
-          ...applications.map(app => ({
+          ...applications.map((app: any) => ({
             id: app.id,
             type: 'application' as const,
-            title: `${app.studentName} - ${app.scholarshipName}`,
+            title: `Application for ${app.scholarshipId}`,
             status: app.status as 'approved' | 'pending' | 'rejected',
-            date: new Date(app.createdAt).toLocaleDateString(),
+            date: new Date(app.submittedAt).toLocaleDateString(),
           })),
-          ...students.slice(0, 3).map(student => ({
+          ...students.slice(0, 3).map((student: any) => ({
             id: student.id,
             type: 'user' as const,
             title: `New student registration: ${student.name}`,
@@ -133,7 +131,7 @@ const Dashboard = () => {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Welcome, {currentUser?.displayName || 'Admin'}
+        Welcome, {currentUser?.email || 'Admin'}
       </Typography>
       
       <Grid container spacing={3}>

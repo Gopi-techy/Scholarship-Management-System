@@ -11,8 +11,54 @@ import {
   TextField,
   Button,
   Link,
-  Paper
+  Paper,
+  InputAdornment,
+  IconButton,
+  Divider,
+  Avatar,
+  AppBar,
+  Toolbar,
+  Stack,
 } from '@mui/material';
+import {
+  Visibility,
+  VisibilityOff,
+  LockOutlined as LockIcon,
+  Email as EmailIcon,
+  School as SchoolIcon,
+} from '@mui/icons-material';
+import { keyframes } from '@mui/system';
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideInLeft = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -25,8 +71,9 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -37,7 +84,7 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        await signIn(values.email, values.password);
+        await login(values.email, values.password);
         toast.success('Login successful!');
         navigate('/');
       } catch (error) {
@@ -49,67 +96,329 @@ const Login = () => {
     },
   });
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <Container maxWidth="sm">
-      <Box
+    <Box>
+      {/* Transparent Navbar */}
+      <AppBar
+        position="fixed"
+        elevation={0}
         sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          backgroundColor: 'transparent',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
-        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Sign in to your account
-          </Typography>
-          <form onSubmit={formik.handleSubmit}>
-            <TextField
-              fullWidth
-              id="email"
-              name="email"
-              label="Email"
-              type="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-              margin="normal"
-              disabled={loading}
-            />
-            <TextField
-              fullWidth
-              id="password"
-              name="password"
-              label="Password"
-              type="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              margin="normal"
-              disabled={loading}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              disabled={loading}
+        <Container maxWidth="lg">
+          <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+            {/* Logo */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                cursor: 'pointer',
+              }}
+              onClick={() => navigate('/')}
             >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </Button>
-            <Box sx={{ textAlign: 'center' }}>
-              <Link component={RouterLink} to="/register" variant="body2">
-                Don't have an account? Sign up
-              </Link>
+              <SchoolIcon sx={{ fontSize: 32, color: 'white' }} />
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  color: 'white',
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                ScholarshipHub
+              </Typography>
             </Box>
-          </form>
-        </Paper>
+
+            {/* Auth Buttons */}
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/register')}
+                sx={{
+                  color: 'white',
+                  borderColor: 'white',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  display: { xs: 'none', sm: 'flex' },
+                  '&:hover': {
+                    borderColor: 'white',
+                    bgcolor: 'rgba(255,255,255,0.1)',
+                  },
+                }}
+              >
+                Sign Up
+              </Button>
+            </Stack>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          position: 'relative',
+          pt: 8,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            opacity: 0.1,
+          },
+        }}
+      >
+        <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            animation: `${fadeIn} 0.8s ease-out`,
+          }}
+        >
+          {/* Logo/Icon */}
+          <Box
+            sx={{
+              animation: `${fadeInUp} 0.8s ease-out`,
+              mb: 3,
+            }}
+          >
+            <Avatar
+              sx={{
+                width: 80,
+                height: 80,
+                bgcolor: 'white',
+                color: 'primary.main',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              }}
+            >
+              <LockIcon sx={{ fontSize: 40 }} />
+            </Avatar>
+          </Box>
+
+          <Paper
+            elevation={12}
+            sx={{
+              p: { xs: 3, sm: 5 },
+              width: '100%',
+              borderRadius: 3,
+              animation: `${fadeInUp} 0.8s ease-out 0.2s both`,
+              background: 'rgba(255, 255, 255, 0.98)',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <Typography
+              component="h1"
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{
+                fontWeight: 700,
+                color: 'primary.main',
+                mb: 1,
+              }}
+            >
+              Welcome Back!
+            </Typography>
+            <Typography
+              variant="body2"
+              align="center"
+              color="text.secondary"
+              sx={{ mb: 4 }}
+            >
+              Sign in to continue to your account
+            </Typography>
+
+            <form onSubmit={formik.handleSubmit}>
+              <Box sx={{ animation: `${slideInLeft} 0.6s ease-out 0.3s both` }}>
+                <TextField
+                  fullWidth
+                  id="email"
+                  name="email"
+                  label="Email Address"
+                  type="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                  margin="normal"
+                  disabled={loading}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ animation: `${slideInLeft} 0.6s ease-out 0.4s both` }}>
+                <TextField
+                  fullWidth
+                  id="password"
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                  margin="normal"
+                  disabled={loading}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon color="action" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  mt: 1,
+                  mb: 2,
+                  animation: `${slideInLeft} 0.6s ease-out 0.5s both`,
+                }}
+              >
+                <Link
+                  component={RouterLink}
+                  to="/forgot-password"
+                  variant="body2"
+                  sx={{
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
+                  Forgot password?
+                </Link>
+              </Box>
+
+              <Box sx={{ animation: `${slideInLeft} 0.6s ease-out 0.6s both` }}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disabled={loading}
+                  sx={{
+                    mt: 2,
+                    py: 1.5,
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 16px rgba(102, 126, 234, 0.5)',
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </Button>
+              </Box>
+
+              <Divider sx={{ my: 3, animation: `${fadeIn} 0.8s ease-out 0.7s both` }}>
+                <Typography variant="body2" color="text.secondary">
+                  OR
+                </Typography>
+              </Divider>
+
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  animation: `${fadeIn} 0.8s ease-out 0.8s both`,
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  Don't have an account?{' '}
+                  <Link
+                    component={RouterLink}
+                    to="/register"
+                    sx={{
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      '&:hover': { textDecoration: 'underline' },
+                    }}
+                  >
+                    Sign up
+                  </Link>
+                </Typography>
+              </Box>
+            </form>
+          </Paper>
+
+          {/* Back to Home */}
+          <Box
+            sx={{
+              mt: 3,
+              animation: `${fadeIn} 0.8s ease-out 0.9s both`,
+            }}
+          >
+            <Button
+              component={RouterLink}
+              to="/"
+              sx={{
+                color: 'white',
+                textTransform: 'none',
+                '&:hover': {
+                  bgcolor: 'rgba(255,255,255,0.1)',
+                },
+              }}
+            >
+              ← Back to Home
+            </Button>
+          </Box>
+        </Box>
+      </Container>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
