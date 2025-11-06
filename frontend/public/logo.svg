@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#1976d2" stroke="#0d47a1" stroke-width="2"/>
+  
+  <!-- Graduation cap -->
+  <g transform="translate(50, 50)">
+    <!-- Cap top -->
+    <polygon points="-25,-15 0,-25 25,-15 25,-10 -25,-10" fill="#ffd700" stroke="#ffc107" stroke-width="1"/>
+    
+    <!-- Cap base -->
+    <rect x="-20" y="-10" width="40" height="8" fill="#ffb300" stroke="#ff9800" stroke-width="1"/>
+    
+    <!-- Tassel -->
+    <line x1="25" y1="-12" x2="30" y2="-5" stroke="#ffd700" stroke-width="1.5"/>
+    <circle cx="30" cy="-3" r="2.5" fill="#ffd700"/>
+    
+    <!-- Book -->
+    <rect x="-15" y="5" width="30" height="20" fill="#fff" stroke="#e0e0e0" stroke-width="1" rx="2"/>
+    <line x1="-15" y1="5" x2="-15" y2="25" stroke="#1976d2" stroke-width="3"/>
+    <line x1="-10" y1="10" x2="10" y2="10" stroke="#bdbdbd" stroke-width="1"/>
+    <line x1="-10" y1="15" x2="10" y2="15" stroke="#bdbdbd" stroke-width="1"/>
+    <line x1="-10" y1="20" x2="5" y2="20" stroke="#bdbdbd" stroke-width="1"/>
+  </g>
+</svg>

@@ -1,8 +1,12 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 const NotFound = () => {
   const navigate = useNavigate();
+
+  // Set page title
+  useDocumentTitle('404 - Page Not Found');
 
   return (
     <Container maxWidth="sm">

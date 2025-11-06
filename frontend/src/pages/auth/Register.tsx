@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import {
   Container,
   Box,
@@ -80,6 +81,9 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const { register } = useAuth();
+
+  // Set page title
+  useDocumentTitle('Sign Up');
 
   const formik = useFormik({
     initialValues: {

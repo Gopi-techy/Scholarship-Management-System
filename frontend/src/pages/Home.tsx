@@ -11,6 +11,7 @@ import {
   Menu as MenuIcon,
 } from '@mui/icons-material';
 import { keyframes } from '@mui/system';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 const fadeInUp = keyframes`
   from {
@@ -96,6 +97,9 @@ const Home = () => {
     disableHysteresis: true,
     threshold: 50,
   });
+
+  // Set the page title
+  useDocumentTitle('Home');
 
   return (
     <Box sx={{ overflow: 'hidden' }}>
